@@ -62,5 +62,15 @@ for user_zip in unique_zip:
             # Zipcode found, move on to the next zipcode in unique_zip
             break  
 
+# Calculate local time given zipcode = -1 or not given (subtract 5 from UTC)
+ind_Unknown_zip = test.index[test.state == '']
+test.loc[ind_Unknown_zip,'local_hour'] = test.loc[ind_Unknown_zip,'local_hour']-5
+# Trace back to the previous day if local_hour < 0
+for i in ind_Unknown_zip:
+    if test.loc[i,'local_hour'] < 0:
+        test.loc[i,'local_hour'] = test.loc[i,'local_hour'] + 24
+        test.loc[i,'day'] = str(int(test.loc[i,'day'])-1)
+         
+
 # Save the updated file as pickle
 test.to_pickle('Time_Update.pickle')
