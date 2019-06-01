@@ -32,8 +32,11 @@ df['local_hour'] = hour_num + df.timezone + df.dst
 
 # Keep day and day_of_week consisent with hour
 day = int(df.loc[1,'day'])-1
-df.loc[df.loc[:,'local_hour']<0,'day'] = day
-dow = parser.parse('April'+ str(day) +',2019').utcnow().strftime("%A")
+df.loc[df.loc[:,'local_hour']<0,'day'] = day 
+if day != 0:
+       dow = parser.parse('April'+ str(day) +',2019').utcnow().strftime("%A")
+else
+       dow = parser.parse('March 31,2019').utcnow().strftime("%A")
 df.loc[df.loc[:,'local_hour']<0,'day_of_week'] = dow
 df.loc[df.loc[:,'local_hour']<0,'local_hour'] +=24 
 
