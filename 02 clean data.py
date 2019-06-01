@@ -35,7 +35,7 @@ day = int(df.loc[1,'day'])-1
 df.loc[df.loc[:,'local_hour']<0,'day'] = day 
 if day != 0:
        dow = parser.parse('April'+ str(day) +',2019').utcnow().strftime("%A")
-else
+else:
        dow = parser.parse('March 31,2019').utcnow().strftime("%A")
 df.loc[df.loc[:,'local_hour']<0,'day_of_week'] = dow
 df.loc[df.loc[:,'local_hour']<0,'local_hour'] +=24 
