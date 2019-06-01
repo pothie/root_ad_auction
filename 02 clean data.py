@@ -31,13 +31,18 @@ hour_num = list(int(x[0:2]) for x in hours_list)
 df['local_hour'] = hour_num + df.timezone + df.dst
 
 # Keep day and day_of_week consisent with hour
-day = int(df.loc[1,'day'])-1
-df.loc[df.loc[:,'local_hour']<0,'day'] = day 
-if day != 0:
-       dow = parser.parse('April'+ str(day) +',2019').utcnow().strftime("%A")
-else:
-       dow = parser.parse('March 31,2019').utcnow().strftime("%A")
-df.loc[df.loc[:,'local_hour']<0,'day_of_week'] = dow
+day_list = list(df.loc[df.loc[:,'local_hour']<0,'day'])
+day_list = list(int(x)-1 for x in day_list)
+df.loc[df.loc[:,'local_hour']<0,'day'] = day_list
+# Update day
+day_string = []
+for x in df.loc[:,'day']:
+    if x!=0:
+        day_string.append('April'+ str(x) +',2019')
+    else:
+        day_string.append('March 31,2019')
+dow = list(parser.parse(str).strftime("%A") for str in day_string)
+df.loc[:,'day_of_week'] = dow
 df.loc[df.loc[:,'local_hour']<0,'local_hour'] +=24 
 
 df.columns[df.isna().any()]
